@@ -8,7 +8,7 @@ RUN true \
 
 RUN true \
 	&& curl https://raw.githubusercontent.com/OWASP/Amass/master/wordlists/namelist.txt > namelist.txt \
-  && curl https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/bitquark-subdomains-top100K.txt > bitquark-subdomains-top100K.txt
+	&& curl https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/bitquark-subdomains-top100K.txt > bitquark-subdomains-top100K.txt
 
 FROM alpine:latest
 
