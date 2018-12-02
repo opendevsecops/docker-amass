@@ -1,8 +1,21 @@
-FROM circleci/golang:latest
+FROM golang:alpine as build
 
-WORKDIR /
+WORKDIR /build
 
 RUN true \
-    && go get -u github.com/OWASP/Amass/...
+	&& apk --no-cache add git curl \
+	&& go get -u github.com/OWASP/Amass/...
 
-ENTRYPOINT ["amass"]
+RUN true \
+	&& curl https://raw.githubusercontent.com/OWASP/Amass/master/wordlists/namelist.txt > namelist.txt \
+  && curl https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/bitquark-subdomains-top100K.txt > bitquark-subdomains-top100K.txt
+
+FROM alpine:latest
+
+WORKDIR /run
+
+COPY --from=build /go/bin/amass /bin/amass
+COPY --from=build /build/namelist.txt /run/namelist.txt
+COPY --from=build /build/bitquark-subdomains-top100K.txt /run/bitquark-subdomains-top100K.txt
+
+ENTRYPOINT ["/bin/amass"]
