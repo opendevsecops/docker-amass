@@ -3,12 +3,17 @@ FROM golang:alpine as build
 WORKDIR /build
 
 RUN true \
-	&& apk --no-cache add git curl \
-	&& go get -u github.com/OWASP/Amass/...
+    && apk --no-cache add \
+        git curl
 
 RUN true \
-	&& curl https://raw.githubusercontent.com/OWASP/Amass/master/wordlists/namelist.txt > namelist.txt \
-	&& curl https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/bitquark-subdomains-top100K.txt > bitquark-subdomains-top100K.txt
+    && go get -u github.com/OWASP/Amass/...
+
+RUN true \
+    && curl https://raw.githubusercontent.com/OWASP/Amass/master/wordlists/namelist.txt > namelist.txt \
+    && curl https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/bitquark-subdomains-top100K.txt > bitquark-subdomains-top100K.txt
+
+# ---
 
 FROM alpine:latest
 
