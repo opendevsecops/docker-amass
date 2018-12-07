@@ -15,6 +15,10 @@ RUN true \
 
 # ---
 
+FROM opendevsecops/launcher:latest as launcher
+
+# ---
+
 FROM alpine:latest
 
 WORKDIR /run
@@ -22,5 +26,6 @@ WORKDIR /run
 COPY --from=build /go/bin/amass /bin/amass
 COPY --from=build /build/namelist.txt /run/namelist.txt
 COPY --from=build /build/bitquark-subdomains-top100K.txt /run/bitquark-subdomains-top100K.txt
+COPY --from=launcher /bin/launcher /bin/launcher
 
-ENTRYPOINT ["/bin/amass"]
+ENTRYPOINT ["/bin/launcher", "/bin/amass"]
